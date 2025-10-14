@@ -16,6 +16,18 @@ const AuthPanel = ({
   const hasRequiredRole = !requiredRole || (user && user.role == requiredRole)
 
 
+
+  if (open) {
+    return (
+      <AuthModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onAuthed={onAuthed}
+      />
+    )
+  }
+
+
   return (
     <section className='container-sm admin-card'>
       <header className='admin-head'>
@@ -24,7 +36,7 @@ const AuthPanel = ({
           버튼 → 모달에서 로그인/회원가입 → 토큰 저장 → /me 호출
         </p>
       </header>
-      {isAuthed ? (
+      {!isAuthed ? (
         <div className="auth-row">
           {/* 로그인 전 */}
           <button
@@ -65,14 +77,10 @@ const AuthPanel = ({
       {/* 사용자 정보 예시 */}
       {me && (
         <pre className="code">
-          {JSON.stringify(me,null,2)}
+          {JSON.stringify(me, null, 2)}
         </pre>
       )}
-      <AuthModal
-        open={open}
-        onClose ={()=>setOpen(false)}
-        onAuthed={onAuthed}
-      />
+
     </section>
   )
 }
