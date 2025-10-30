@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import FileList from './FileList'
+
 import UploadForm from './UploadForm'
 import "./style/UserDashboard.scss"
 import { uploadToS3 } from '../../api/postApi'
 import { usePosts } from '../../hooks/usePosts'
+import UserPostList from './UserPostList'
 const UserDashboard = () => {
   const [search, setSearch] = useState("")
   const [open, setOpen] = useState(false)
@@ -39,7 +40,7 @@ const handleUploaded = async ({ title, content, file }) => {
           </button>
         </div>
       </div>
-      <div className="inner">
+      <div >
         {open && (
           <UploadForm
             onUploaded={handleUploaded} 
@@ -47,7 +48,12 @@ const handleUploaded = async ({ title, content, file }) => {
             onClose={() => setOpen(false)}
           />
         )}
-        <FileList />
+        <UserPostList
+        items={items}  
+        loading={loading}
+        onReload={load}
+        search={search}
+        />
       </div>
     </section>
   )
