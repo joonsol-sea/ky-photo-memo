@@ -49,7 +49,7 @@ async function presignGet(Key, sec = 300) {
 }
 
 async function deleteObject(Key) {
-  if (!Bucket) throw new Error("s3 burket is undefined");
+  if (!Bucket) throw new Error("s3 bucket is undefined");
   if (!Key) throw new Error("Key is required");
 
   const cmd = new DeleteObjectCommand({ Bucket, Key });
@@ -60,7 +60,7 @@ async function deleteObject(Key) {
   return { ok: true, message: `Deleted : ${Key}` };
 }
 async function updateObject(Key, Body, ContentType) {
-  if (!Bucket) throw new Error("s3 burket is undefined");
+  if (!Bucket) throw new Error("s3 bucket is undefined");
   if (!Key) throw new Error("Key is required");
 
   const cmd = new PutObjectCommand({

@@ -169,7 +169,7 @@ router.put("/:id", authenticateToken, ensureObjectId, async (req, res) => {
       return res.status(404).json({ message: "존재하지 않는 게시글" });
 
     const uid = String(req.user.id || req.user._id); // 추가됨
-    if (String(doc.user) !== uid) {
+    if (String(before.user) !== uid) {
       return res.status(403).json({ message: "권한이 없습니다." }); // 추가됨
     }
 
