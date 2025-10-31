@@ -5,18 +5,18 @@ import { formatYMD } from "../../util/formatYMD";
 import { usePosts } from "../../hooks/usePosts";
 import UploadForm from "./UploadForm";
 const UserPostItem = ({ item = {} }) => {
-  const { remove } = usePosts();
-  const [uploadOpen, setUploadOpen] = useState(false);
+
+  const {remove}=usePosts()
+  const [uploadOpen, setUploadOpen] = useState(false)
+
 
   const files = useMemo(() => {
-    const row = Array.isArray(item.fileUrl)
-      ? item.fileUrl
-      : item?.fileUrl
-      ? [item.fileUrl]
-      : [];
 
-    return row.map(toPublicUrl).filter(Boolean);
-  }, [item]);
+    const row = Array.isArray(item.fileUrl) ? item.fileUrl : (item?.fileUrl ? [item.fileUrl] : [])
+    return row.map(toPublicUrl).filter(Boolean)
+
+  }, [item])
+
 
   const title = item?.title ?? "제목없음";
   const content = item?.content ?? "";
