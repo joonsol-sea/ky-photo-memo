@@ -1,21 +1,28 @@
-import React from 'react'
-import { Navigate, Outlet, useLocation } from 'react-router-dom'
+import React from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 const ProtectRoute = ({
-    isAuthed,
-    user,
-    requiredRole,
-    redirect = '/admin/login'
+ isAuthed,
+ user,
+ me,
+ meloading = false,
+ requiredRole,
+ redirect = "/admin/login",
 }) => {
+ const location = useLocation();
 
-    const location = useLocation()
+ if (!isAuthed) {
+  return <Navigate to={redirect} replace state={{ from: location }} />;
+ }
 
-    if(!isAuthed){
-        return <Navigate to={redirect} replace state={{from:location}}/>
-    }
-    if(requiredRole && user?.role !==requiredRole){
-        return <Navigate to='/' replace/>
-    }
-    return <Outlet/>
-}
+ if (requiredRole && meloading) {
+  return null;
+ }
+ const role = (me?.role ?? user?.role ?? "").toLowerCase();
+ const need = (requiredRole ?? "").toLowerCase();
+ if (need && role !== need) {
+  return <Navigate to="/" replace />;
+ }
+ return <Outlet />;
+};
 
-export default ProtectRoute
+export default ProtectRoute;
