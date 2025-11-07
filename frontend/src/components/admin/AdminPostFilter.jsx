@@ -15,17 +15,13 @@ const AdminPostFilter = ({ value, onChange }) => {
      })
     }
    />
-   <input
-    type="text"
-    value={value.user}
-    onChange={(e) =>
-     set({
-      user: e.target.value.trim(),
-      page: 1,
-     })
-    }
-    placeholder="userId 선택"
-   />
+    <input
+     type="text"
+     placeholder="userId (선택)"
+     value={value.user}
+     onChange={(e) => set({ user: e.target.value.replace(/\s+/g, "") })}
+    />
+
    <select
     value={value.status}
     onChange={(e) =>

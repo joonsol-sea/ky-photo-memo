@@ -1,56 +1,54 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { fetchAdminPosts, patchAdminPost } from "../../api/adminApi";
+import { fetchAdminPosts } from "../../api/adminApi";
 import AdminPostList from "../../components/admin/AdminPostsList";
 import AdminPostFilter from "../../components/admin/AdminPostFilter";
+
+// 작성자 식별자 통일: 문자열/ObjectId/객체 모두 처리
+const getUserId = (u) => {
+  if (!u) return "";
+  if (typeof u === "string") return u.toLowerCase();
+  if (typeof u === "object") {
+    if (u._id) return String(u._id).toLowerCase();
+    if (u.id)  return String(u.id).toLowerCase();
+  }
+  return String(u).toLowerCase();
+};
+
 const AdminPosts = () => {
- const [list, setList] = useState([]);
- const [query, setQuery] = useState({
-  page: 1,
-  size: 10,
-  status: "",
-  q: "",
-  user: "",
- });
+  const [rawList, setRawList] = useState([]);
+  const [query, setQuery] = useState({ q: "", user: "", status: "" });
 
- useEffect(() => {
-  (async () => {
-   const items = await fetchAdminPosts(query);
-   setList(items);
-  })();
- }, [query]);
+  useEffect(() => {
+    (async () => {
+      const items = await fetchAdminPosts(); // 서버 필터 X, 전체 받아오기
+      setRawList(Array.isArray(items) ? items : []);
+    })();
+  }, []);
 
- const handleApprove = async (id) => {
-  try {
-   const updated = await patchAdminPost(id, { status: "approved" });
+  const items = useMemo(() => {
+    const q = query.q.trim().toLowerCase();
+    const user = query.user.replace(/\s+/g, "").toLowerCase(); // 공백 제거
+    const status = query.status.trim().toLowerCase();
 
-   setList((prev) => prev.map((it) => (it._id === id ? updated : it)));
-  } catch (error) {
-   console.error("승인 처리 실패", error);
-  }
- };
- const handleReject = async (id) => {
-  try {
-   const updated = await patchAdminPost(id, { status: "rejected" });
+    return rawList.filter((it) => {
+      const title = String(it.title ?? "").toLowerCase();
+      const uid   = getUserId(it.user); // ← 핵심
+      const st    = String(it.status ?? "").toLowerCase();
 
-   setList((prev) => prev.map((it) => (it._id === id ? updated : it)));
-  } catch (error) {
-   console.error("승인 처리 실패", error);
-  }
- };
+      const matchTitle  = q ? title.includes(q) : true;
+      const matchUser   = user ? uid.includes(user) : true;
+      const matchStatus = status ? st === status : true;
 
- return (
-  <div>
-   <AdminPostFilter
-   value={query}
-   onChange={setQuery}
-   />
-   <AdminPostList
-    items={list}
-    onApprove={handleApprove}
-    onReject={handleReject}
-   />
-  </div>
- );
+      return matchTitle && matchUser && matchStatus;
+    });
+  }, [rawList, query]);
+
+  return (
+    <div className="inner">
+      <AdminPostFilter value={query} onChange={setQuery} />
+      <AdminPostList items={items} />
+    </div>
+  );
 };
 
 export default AdminPosts;
