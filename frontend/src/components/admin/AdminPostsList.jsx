@@ -3,15 +3,15 @@ import { formatYMD } from "../../util/formatYMD";
 const AdminPostsList = ({ items = [], onApprove, onReject }) => {
  return (
   <div className="inner">
-   <header>
-    <span></span>
-    <span>제목</span>
-    <span>작성자</span>
-    <span>상태</span>
-    <span>업데이트</span>
-    <span>액션</span>
-   </header>
-   <ul className="admin-list-body">
+   <ul className="admin-list">
+    <li>
+     <span></span>
+     <span>제목</span>
+     <span>작성자</span>
+     <span>상태</span>
+     <span>업데이트</span>
+     <span>액션</span>
+    </li>
     {items.map((it, i) => (
      <li key={it._id}>
       <span className="num">{i + 1}</span>

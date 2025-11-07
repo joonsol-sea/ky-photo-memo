@@ -20,7 +20,7 @@ const AdminPostFilter = ({ value, onChange }) => {
     value={value.user}
     onChange={(e) =>
      set({
-      user: e.target.value,
+      user: e.target.value.trim(),
       page: 1,
      })
     }
