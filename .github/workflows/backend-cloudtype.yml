@@ -25,6 +25,6 @@ jobs:
         uses: cloudtype-github-actions/deploy@v1
         with:
           token: ${{ secrets.CLOUDTYPE_API_KEY }}
-          project: ky-photo-memo      # Cloudtype 프로젝트명
+          project: fullstack-website-2506      # Cloudtype 프로젝트명
           stage: main                 # Cloudtype의 stage 이름
-          yaml: cloudtype.yaml        # ← 요거 중요!
+          yaml: bakcend-cloudtype.yaml        # ← 요거 중요!
