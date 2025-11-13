@@ -25,5 +25,19 @@ jobs:
         uses: cloudtype-github-actions/deploy@v1
         with:
           token: ${{ secrets.CLOUDTYPE_API_KEY }}
-          project: fullstack-website-2506
-          stage: main
+          project: fullstack-website-2506   # Cloudtype 프로젝트명
+          stage: main                       # Cloudtype stage 이름
+          yaml: |-
+            name: ky-photo-memo
+            app: node@24
+            options:
+              install: npm ci
+              ports: 3000/http
+              start: npm start
+            context:
+              git:
+                url: https://github.com/${{ github.repository }}.git
+                ref: ${{ github.ref }}
+                subdir: backend
+              preset: node
+
